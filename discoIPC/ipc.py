@@ -32,6 +32,8 @@ class DiscordIPC(object):
         # The Discord IPC Socket.
         self.socket = None
 
+        self.data = {}
+
     def _get_platform(self):
         """Get the system's platformself."""
         system = platform.system().lower()
@@ -141,7 +143,10 @@ class DiscordIPC(object):
         self.connected = False
         self.activity = None
 
-    def update_activity(self, activity):
+    def clear(self):
+        self.update_activity()
+
+    def update_activity(self, activity=None):
         """Update User's Discord activity."""
         # Let's add some payload to the acitivity object.
         payload = {
@@ -153,6 +158,14 @@ class DiscordIPC(object):
             'nonce': str(uuid.uuid4())
         }
 
+        if activity:
+            payload['args']['activity'] = activity
+
         # Send activity data to Discord Client.
         self._send(1, payload)
         self._decode()
+
+        if self.data.get("evt") == "ERROR":
+            code = self.data['data'].get("code")
+            message = self.data['data'].get("message")
+            raise Exception(f"Update presence error! code: {code} | message: {message}")
