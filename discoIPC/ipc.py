@@ -82,7 +82,8 @@ class DiscordIPC(object):
             decoded_header = struct.unpack('<ii', encoded_header)
             encoded_data = recived_data[8:]
 
-        return json.loads(encoded_data.decode('utf-8'))
+        self.data = json.loads(encoded_data.decode('utf-8'))
+        return self.data
 
     def _send(self, opcode, payload):
         """Send the payload to Discord via Discord IPC Socket."""
