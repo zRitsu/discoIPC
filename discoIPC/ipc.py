@@ -13,14 +13,14 @@ import uuid
 class DiscordIPC(object):
     """Docstring for DiscordIPC."""
 
-    def __init__(self, client_id):
+    def __init__(self, client_id, pipe=0):
         """Docstring for __init__."""
         super(DiscordIPC, self).__init__()
 
         # Your computer's platform.
         self.platform = self._get_platform()
         # The connection path to Discord IPC Socket.
-        self.ipc_path = self._get_ipc_path()
+        self.ipc_path = self._get_ipc_path(pipe)
         # Your Application's ID (a.k.a. Client ID).
         self.client_id = client_id
         # The process ID of the running process.
